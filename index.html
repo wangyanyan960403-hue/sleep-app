@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>别熬夜了</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #ece7df;
+      --phone: #f7f4ef;
+      --card: rgba(255, 255, 255, 0.72);
+      --card-strong: rgba(255, 255, 255, 0.88);
+      --line: rgba(233, 226, 217, 0.95);
+      --line-2: rgba(223, 216, 207, 0.95);
+      --text: #4f4f4f;
+      --text-2: #7d7d7d;
+      --text-3: #a0a0a0;
+      --blue: #b7cfdb;
+      --blue-deep: #9fbccc;
+      --blue-light: #dce9ef;
+      --blue-soft: #edf4f7;
+      --rose: #dfc9c4;
+      --sand: #e7ddd2;
+      --mint: #e4ede7;
+      --gold: #d9c89d;
+      --shadow: 0 10px 28px rgba(89, 74, 56, 0.06);
+      --shadow-2: 0 18px 40px rgba(89, 74, 56, 0.08);
+      --radius-xl: 26px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(202, 221, 230, 0.55), transparent 22%),
+        radial-gradient(circle at 88% 12%, rgba(230, 218, 208, 0.52), transparent 24%),
+        radial-gradient(circle at 80% 72%, rgba(227, 237, 231, 0.42), transparent 25%),
+        linear-gradient(180deg, #f0ece6 0%, #e7e1d9 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      color: var(--text);
+    }
+
+    .phone {
+      width: 393px;
+      height: 852px;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(215, 229, 235, 0.5), transparent 25%),
+        radial-gradient(circle at 100% 10%, rgba(236, 225, 214, 0.55), transparent 28%),
+        linear-gradient(180deg, #f8f5f0 0%, #f4efe8 100%);
+      border-radius: 36px;
+      overflow: hidden;
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.75);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.65) 0.5px, transparent 0.5px);
+      background-size: 10px 10px;
+      opacity: 0.16;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .status-bar {
+      height: 46px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-3);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 18px 96px;
+      scroll-behavior: smooth;
+      position: relative;
+      z-index: 2;
+      scrollbar-width: none;
+    }
+
+    .content::-webkit-scrollbar {
+      display: none;
+    }
+
+    .page {
+      display: none;
+      animation: fade 0.18s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #525252;
+      margin: 6px 0 18px;
+    }
+
+    .card,
+    .soft-card,
+    .stat-card,
+    .mini-metric-card,
+    .setting-card,
+    .chart-box,
+    .vip-card {
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(239, 233, 225, 0.9);
+      backdrop-filter: blur(18px);
+    }
+
+    .card::before,
+    .soft-card::before,
+    .stat-card::before,
+    .mini-metric-card::before,
+    .setting-card::before,
+    .chart-box::before,
+    .vip-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(223, 236, 242, 0.6), transparent 24%),
+        radial-gradient(circle at 100% 0%, rgba(234, 225, 216, 0.55), transparent 24%);
+      pointer-events: none;
+    }
+
+    .card > *,
+    .soft-card > *,
+    .stat-card > *,
+    .mini-metric-card > *,
+    .setting-card > *,
+    .chart-box > *,
+    .vip-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .soft-card {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .sub-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #595959;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .icon-stroke {
+      width: 18px;
+      height: 18px;
+      stroke: #b2c9d6;
+      stroke-width: 1.8;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .hero-wrap {
+      width: 272px;
+      height: 272px;
+      margin: 8px auto 26px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.96), rgba(250,248,244,0.96) 60%, rgba(236, 233, 227, 0.9) 100%);
+      border: 6px solid #e3ebf0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow:
+        inset 0 2px 8px rgba(255, 255, 255, 0.95),
+        0 16px 36px rgba(120, 120, 120, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 70% 20%, rgba(223, 238, 246, 0.65), transparent 26%);
+      pointer-events: none;
+    }
+
+    .clock {
+      font-size: 68px;
+      line-height: 1;
+      font-weight: 600;
+      color: #535353;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .period {
+      margin-top: 12px;
+      font-size: 15px;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-main-text {
+      text-align: center;
+      font-size: 18px;
+      line-height: 1.5;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .home-sub-text {
+      text-align: center;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #9b9b9b;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: 20px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.985);
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, var(--blue) 0%, var(--blue-deep) 100%);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(184, 209, 220, 0.35);
+      margin-bottom: 12px;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.92);
+      color: #515151;
+      border: 1px solid var(--line-2);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.035);
+      margin-bottom: 14px;
+    }
+
+    .note-title {
+      font-size: 12px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .note-text {
+      font-size: 13px;
+      line-height: 1.7;
+      color: #757575;
+    }
+
+    .overview-card {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 138px;
+    }
+
+    .overview-left {
+      flex: 1;
+    }
+
+    .overview-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #545454;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .overview-score {
+      font-size: 48px;
+      line-height: 1;
+      font-weight: 600;
+      color: #555;
+    }
+
+    .overview-score span {
+      font-size: 16px;
+      color: #9e9e9e;
+      font-weight: 500;
+      margin-left: 4px;
+    }
+
+    .overview-desc {
+      margin-top: 18px;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #9a9a9a;
+    }
+
+    .overview-tag {
+      font-size: 13px;
+      color: #d09c97;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 2px;
+      background: rgba(255,255,255,0.78);
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(236, 223, 217, 0.92);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.85);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: #eee9e2;
+      overflow: hidden;
+      margin-top: 14px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #bdd4df 0%, #9fbecf 100%);
+      transition: width 0.25s ease;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 16px;
+      min-height: 116px;
+    }
+
+    .stat-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #6f6f6f;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .stat-mini-icon {
+      width: 16px;
+      height: 16px;
+      stroke: #999;
+      stroke-width: 1.8;
+      fill: none;
+      flex-shrink: 0;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 600;
+      line-height: 1;
+      color: #555;
+    }
+
+    .stat-unit {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #9d9d9d;
+    }
+
+    .light-blue {
+      color: #a9c8d7;
+    }
+
+    .light-rose {
+      color: #cdb7aa;
+    }
+
+    .chart-box {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .chart-title {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #555;
+    }
+
+    .chart-area {
+      height: 210px;
+      position: relative;
+      padding: 8px 4px 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .chart-grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      border-top: 1px dashed #e8e2db;
+      z-index: 0;
+    }
+
+    .chart-grid-line:nth-child(1) { top: 18px; }
+    .chart-grid-line:nth-child(2) { top: 62px; }
+    .chart-grid-line:nth-child(3) { top: 106px; }
+    .chart-grid-line:nth-child(4) { top: 150px; }
+    .chart-grid-line:nth-child(5) { top: 194px; }
+
+    .bar-wrap {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      height: 100%;
+    }
+
+    .bar {
+      width: 86%;
+      border-radius: 12px 12px 4px 4px;
+      background: linear-gradient(180deg, #c0d7e2 0%, #a4c0cf 100%);
+      min-height: 16px;
+      transition: height 0.25s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .bar-label {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #8f8f8f;
+    }
+
+    .growth-top-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .mini-metric-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 16px;
+      min-height: 102px;
+    }
+
+    .mini-metric-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #7d7d7d;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .mini-metric-value {
+      font-size: 24px;
+      line-height: 1;
+      color: #565656;
+      font-weight: 600;
+    }
+
+    .mini-metric-unit {
+      margin-top: 8px;
+      color: #9c9c9c;
+      font-size: 13px;
+    }
+
+    .level-main-card {
+      text-align: center;
+    }
+
+    .level-emoji {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+
+    .level-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #545454;
+      margin-bottom: 4px;
+    }
+
+    .level-name-cn {
+      font-size: 14px;
+      color: #9a9a9a;
+      margin-bottom: 18px;
+    }
+
+    .level-between {
+      display: flex;
+      justify-content: space-between;
+      color: #8f8f8f;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .upgrade-tip {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #9e9e9e;
+      text-align: center;
+    }
+
+    .level-list-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(250, 248, 245, 0.9);
+      border: 1px solid #f0ebe4;
+      border-radius: 18px;
+      padding: 14px 14px;
+      margin-bottom: 10px;
+      transition: 0.2s ease;
+    }
+
+    .level-list-item.active {
+      border: 2px solid #aac7d6;
+      background: rgba(252, 252, 251, 0.98);
+      box-shadow: 0 8px 18px rgba(171, 199, 214, 0.12);
+    }
+
+    .level-list-icon {
+      font-size: 28px;
+      width: 34px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .level-list-content {
+      flex: 1;
+    }
+
+    .level-list-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #5a5a5a;
+    }
+
+    .level-list-desc {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #9a9a9a;
+      line-height: 1.5;
+    }
+
+    .current-badge {
+      background: #aac7d6;
+      color: white;
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .badge-item {
+      background: rgba(250, 248, 245, 0.9);
+      border: 1px solid #f0ebe4;
+      border-radius: 18px;
+      padding: 14px 8px;
+      min-height: 118px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .badge-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+      opacity: 0.45;
+    }
+
+    .badge-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #6c6c6c;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .badge-desc {
+      font-size: 11px;
+      line-height: 1.55;
+      color: #9c9c9c;
+    }
+
+    .relax-circle {
+      width: 192px;
+      height: 192px;
+      margin: 10px auto 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #d8e8ef 0%, #c8dce6 60%, #b9cfdb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 22px;
+      font-weight: 700;
+      box-shadow: 0 10px 24px rgba(171, 200, 214, 0.28);
+      transition: all 1.8s ease;
+    }
+
+    .relax-circle.breathe {
+      animation: breathe 6s infinite ease-in-out;
+    }
+
+    @keyframes breathe {
+      0% { transform: scale(0.92); opacity: 0.95; }
+      33% { transform: scale(1.02); opacity: 1; }
+      66% { transform: scale(0.98); }
+      100% { transform: scale(0.92); }
+    }
+
+    .relax-small {
+      text-align: center;
+      font-size: 14px;
+      color: #8f8f8f;
+      line-height: 1.8;
+      margin-top: 10px;
+    }
+
+    .story-item,
+    .noise-item,
+    .music-item,
+    .setting-row,
+    .time-box {
+      transition: 0.18s ease;
+    }
+
+    .story-item {
+      background: rgba(247, 244, 240, 0.9);
+      border: 1px solid #eee8e0;
+      border-radius: 20px;
+      padding: 14px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .story-item:active,
+    .noise-item:active,
+    .music-item:active {
+      transform: scale(0.985);
+    }
+
+    .story-emoji {
+      font-size: 26px;
+      width: 34px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .story-content {
+      flex: 1;
+    }
+
+    .story-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #545454;
+      margin-bottom: 4px;
+    }
+
+    .story-desc {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #8f8f8f;
+      margin-bottom: 6px;
+    }
+
+    .story-time {
+      font-size: 12px;
+      color: #aac7d6;
+      font-weight: 600;
+    }
+
+    .story-play {
+      color: #888;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .white-noise-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .noise-item {
+      background: rgba(247, 244, 240, 0.9);
+      border: 1px solid #eee8e0;
+      border-radius: 18px;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .noise-item.active {
+      background: linear-gradient(180deg, #edf5f8 0%, #e2edf2 100%);
+      border-color: #d8e6ed;
+      box-shadow: 0 10px 24px rgba(171, 200, 214, 0.16);
+    }
+
+    .noise-emoji {
+      font-size: 28px;
+    }
+
+    .noise-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #575757;
+    }
+
+    .music-item {
+      background: rgba(247, 244, 240, 0.9);
+      border: 1px solid #eee8e0;
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .music-item.active {
+      background: linear-gradient(180deg, #edf5f8 0%, #e2edf2 100%);
+      border-color: #d8e6ed;
+    }
+
+    .music-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #585858;
+      margin-bottom: 4px;
+    }
+
+    .music-time {
+      font-size: 12px;
+      color: #9c9c9c;
+    }
+
+    .music-play {
+      color: #888;
+      font-size: 18px;
+      margin-left: 12px;
+    }
+
+    .setting-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .vip-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(180deg, rgba(245, 244, 240, 0.92) 0%, rgba(240, 237, 231, 0.92) 100%);
+      border-radius: 22px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    .vip-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .vip-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #e8eff3 0%, #dce7ed 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #91afbf;
+      font-size: 18px;
+      flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
+    }
+
+    .vip-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #545454;
+      margin-bottom: 4px;
+    }
+
+    .vip-desc {
+      font-size: 12px;
+      color: #9a9a9a;
+      line-height: 1.5;
+    }
+
+    .vip-arrow {
+      color: #adc6d3;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .setting-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #575757;
+      margin-bottom: 16px;
+    }
+
+    .setting-row {
+      background: rgba(248, 245, 241, 0.95);
+      border: 1px solid #efeae3;
+      border-radius: 18px;
+      padding: 14px 14px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .setting-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .setting-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .setting-row-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #585858;
+    }
+
+    .setting-row-sub {
+      font-size: 12px;
+      color: #9b9b9b;
+      line-height: 1.6;
+    }
+
+    .time-box {
+      width: 100%;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.96);
+      border: 1px solid #e6e0d8;
+      border-radius: 16px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      cursor: pointer;
+    }
+
+    .time-box:active {
+      transform: scale(0.995);
+    }
+
+    .time-value {
+      font-size: 16px;
+      color: #545454;
+      font-weight: 600;
+    }
+
+    .time-action {
+      font-size: 16px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .time-input-hidden {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle {
+      width: 50px;
+      height: 28px;
+      border-radius: 999px;
+      background: #d9d9d9;
+      position: relative;
+      cursor: pointer;
+      transition: 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: 0.18s ease;
+    }
+
+    .toggle.on {
+      background: #abc7d5;
+    }
+
+    .toggle.on::after {
+      left: 25px;
+    }
+
+    .about-box {
+      text-align: center;
+      padding-top: 8px;
+    }
+
+    .about-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .about-version {
+      font-size: 13px;
+      color: #989898;
+      margin-bottom: 14px;
+    }
+
+    .about-desc {
+      font-size: 12px;
+      line-height: 1.9;
+      color: #9b9b9b;
+    }
+
+    .reset-btn {
+      width: 100%;
+      height: 54px;
+      border-radius: 18px;
+      border: 1px solid #e6c7c5;
+      background: transparent;
+      color: #d18986;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      height: 72px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(236, 230, 223, 0.96);
+      border-radius: 24px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-2);
+      z-index: 3;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      min-width: 58px;
+      height: 52px;
+      color: #8e8e8e;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      border-radius: 16px;
+      transition: 0.18s ease;
+    }
+
+    .nav-item.active {
+      color: #7fa4b8;
+      font-weight: 700;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 6px 14px rgba(171, 199, 214, 0.12);
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      bottom: 94px;
+      transform: translateX(-50%) translateY(12px);
+      background: rgba(56, 56, 56, 0.92);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+      z-index: 30;
+      transition: 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+      }
+
+      .phone {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+      }
+
+      .content {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .bottom-nav {
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status-bar">
+      <div id="statusTime">22:15</div>
+      <div>📶 WiFi 🔋</div>
+    </div>
+
+    <div class="content">
+      <!-- 首页 -->
+      <div class="page active" id="page-home">
+        <div class="page-title">别熬夜了</div>
+
+        <div class="hero-wrap">
+          <div class="clock" id="clock">22:15</div>
+          <div class="period" id="period">
+            <span id="periodEmoji">🌙</span>
+            <span id="periodText">夜晚</span>
+          </div>
+        </div>
+
+        <div class="home-main-text" id="headline">已经很晚了，可以早点休息吗？</div>
+        <div class="home-sub-text" id="subline">明天还有很多美好的事情在等你。</div>
+
+        <button class="btn btn-primary" onclick="sleepNow()">我准备睡觉了</button>
+        <button class="btn btn-secondary" onclick="waitMore()">再拖10分钟</button>
+
+        <div class="soft-card">
+          <div class="note-title">今日提醒</div>
+          <div class="note-text" id="tipText">今天已经很努力了，早点休息，明天会更有精神。</div>
+        </div>
+      </div>
+
+      <!-- 统计 -->
+      <div class="page" id="page-stats">
+        <div class="page-title">睡眠统计</div>
+
+        <div class="card overview-card">
+          <div class="overview-left">
+            <div class="overview-head">
+              <svg class="icon-stroke" viewBox="0 0 24 24">
+                <path d="M4 12h3l2-4 3 9 3-6h5"></path>
+              </svg>
+              <span>作息稳定度</span>
+            </div>
+            <div class="overview-score"><span id="stabilityScoreMain">0</span> <span>/ 100</span></div>
+            <div class="progress-track">
+              <div class="progress-bar" id="stabilityBar"></div>
+            </div>
+            <div class="overview-desc">基于近7天的睡眠时间规律性评估</div>
+          </div>
+          <div class="overview-tag" id="stabilityTag">需改进</div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-top">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M6 20c0-3 3-5 6-5s6 2 6 5"></path>
+              </svg>
+              <span>连续早睡</span>
+            </div>
+            <div class="stat-value light-blue" id="streakDays">0</div>
+            <div class="stat-unit">天</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <path d="M17 6a7 7 0 1 0 1 12"></path>
+              </svg>
+              <span>本周熬夜</span>
+            </div>
+            <div class="stat-value light-rose" id="lateCount">0</div>
+            <div class="stat-unit">次</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7v5l3 2"></path>
+              </svg>
+              <span>最晚睡眠</span>
+            </div>
+            <div class="stat-value" id="latestSleep">--:--</div>
+            <div class="stat-unit">最近一次</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <path d="M4 16l5-5 4 4 7-7"></path>
+              </svg>
+              <span>平均睡眠</span>
+            </div>
+            <div class="stat-value" id="avgSleep">7.5</div>
+            <div class="stat-unit">小时</div>
+          </div>
+        </div>
+
+        <div class="chart-box">
+          <div class="chart-title">本周睡眠时长</div>
+          <div class="chart-area" id="barsBox">
+            <div class="chart-grid-line"></div>
+            <div class="chart-grid-line"></div>
+            <div class="chart-grid-line"></div>
+            <div class="chart-grid-line"></div>
+            <div class="chart-grid-line"></div>
+          </div>
+        </div>
+
+        <div class="soft-card">
+          <div class="note-text">
+            💡 建议每天保持 7-8 小时的睡眠时间，在晚上 10 点到 11 点之间入睡最佳。规律的作息能提高睡眠质量和第二天的精神状态。
+          </div>
+        </div>
+      </div>
+
+      <!-- 成长 -->
+      <div class="page" id="page-growth">
+        <div class="page-title">成长之路</div>
+
+        <div class="growth-top-grid">
+          <div class="mini-metric-card">
+            <div class="mini-metric-label">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <path d="M12 3c4 4 6 7 6 10a6 6 0 1 1-12 0c0-3 2-6 6-10z"></path>
+              </svg>
+              <span>连续打卡</span>
+            </div>
+            <div class="mini-metric-value light-blue" id="growthStreakTop">0</div>
+            <div class="mini-metric-unit">天</div>
+          </div>
+
+          <div class="mini-metric-card">
+            <div class="mini-metric-label">
+              <svg class="stat-mini-icon" viewBox="0 0 24 24">
+                <path d="M4 16l5-5 4 4 7-7"></path>
+              </svg>
+              <span>历史最长</span>
+            </div>
+            <div class="mini-metric-value light-rose" id="longestStreak">0</div>
+            <div class="mini-metric-unit">天</div>
+          </div>
+        </div>
+
+        <div class="card level-main-card">
+          <div class="level-emoji" id="levelEmoji">🦉</div>
+          <div class="level-name" id="levelName">Night Owl</div>
+          <div class="level-name-cn" id="levelNameCn">夜猫子</div>
+
+          <div class="level-between">
+            <span>经验值: <span id="expValue">0</span></span>
+            <span>下一级: <span id="nextLevelExp">100</span></span>
+          </div>
+
+          <div class="progress-track" style="margin-top:12px;">
+            <div class="progress-bar" id="growthBar"></div>
+          </div>
+
+          <div class="upgrade-tip" id="upgradeTip">还需 100 经验升级</div>
+        </div>
+
+        <div class="card">
+          <div class="sub-title">等级进阶</div>
+
+          <div class="level-list-item active" id="lv0">
+            <div class="level-list-icon">🦉</div>
+            <div class="level-list-content">
+              <div class="level-list-title">Night Owl</div>
+              <div class="level-list-desc">夜猫子 · 0 经验值</div>
+            </div>
+            <div class="current-badge" id="badge0">当前</div>
+          </div>
+
+          <div class="level-list-item" id="lv1">
+            <div class="level-list-icon">🌙</div>
+            <div class="level-list-content">
+              <div class="level-list-title">Moon Guardian</div>
+              <div class="level-list-desc">月亮守护者 · 100 经验值</div>
+            </div>
+          </div>
+
+          <div class="level-list-item" id="lv2">
+            <div class="level-list-icon">⭐</div>
+            <div class="level-list-content">
+              <div class="level-list-title">Star Traveler</div>
+              <div class="level-list-desc">星辰旅人 · 300 经验值</div>
+            </div>
+          </div>
+
+          <div class="level-list-item" id="lv3">
+            <div class="level-list-icon">🌅</div>
+            <div class="level-list-content">
+              <div class="level-list-title">Morning Light</div>
+              <div class="level-list-desc">晨光使者 · 600 经验值</div>
+            </div>
+          </div>
+
+          <div class="level-list-item" id="lv4">
+            <div class="level-list-icon">👑</div>
+            <div class="level-list-content">
+              <div class="level-list-title">Self-discipline Master</div>
+              <div class="level-list-desc">自律大师 · 1000 经验值</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub-title">成就徽章</div>
+
+          <div class="badge-grid">
+            <div class="badge-item">
+              <div class="badge-icon">⭐</div>
+              <div class="badge-name">初心者</div>
+              <div class="badge-desc">连续早睡7天</div>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-icon">💎</div>
+              <div class="badge-name">坚持者</div>
+              <div class="badge-desc">连续早睡30天</div>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-icon">🏆</div>
+              <div class="badge-name">自律达人</div>
+              <div class="badge-desc">一个月无熬夜</div>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-icon">🐦</div>
+              <div class="badge-name">早起鸟</div>
+              <div class="badge-desc">连续早起7天</div>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-icon">✨</div>
+              <div class="badge-name">梦境探索者</div>
+              <div class="badge-desc">使用放松模式10次</div>
+            </div>
+
+            <div class="badge-item">
+              <div class="badge-icon">👑</div>
+              <div class="badge-name">睡眠冠军</div>
+              <div class="badge-desc">累计早睡100天</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 放松 -->
+      <div class="page" id="page-relax">
+        <div class="page-title">放松模式</div>
+
+        <div class="card">
+          <div class="sub-title">
+            <svg class="icon-stroke" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8"></circle>
+              <path d="M12 4v16"></path>
+            </svg>
+            <span>呼吸练习</span>
+          </div>
+
+          <div class="relax-circle" id="breathCircle">点击开始</div>
+          <button class="btn btn-primary" onclick="startBreathing()">开始呼吸</button>
+          <div class="relax-small" id="breathText">吸气4秒 → 保持4秒 → 呼气4秒</div>
+        </div>
+
+        <div class="card">
+          <div class="sub-title">
+            <svg class="icon-stroke" viewBox="0 0 24 24">
+              <path d="M5 18c3 0 3-4 6-4s3 4 6 4"></path>
+              <path d="M5 12c2 0 2-3 4-3s2 3 4 3 2-3 4-3"></path>
+            </svg>
+            <span>睡眠故事</span>
+          </div>
+
+          <div class="note-text" style="margin-bottom:14px;">让温柔的声音陪你入睡</div>
+
+          <div class="story-item" data-sound="海边小屋" onclick="playSound('海边小屋', this)">
+            <div class="story-emoji">🏖️</div>
+            <div class="story-content">
+              <div class="story-title">海边小屋</div>
+              <div class="story-desc">在温暖的海边小屋中，听着海浪声入睡</div>
+              <div class="story-time">25分钟</div>
+            </div>
+            <div class="story-play">▷</div>
+          </div>
+
+          <div class="story-item" data-sound="森林夜晚" onclick="playSound('森林夜晚', this)">
+            <div class="story-emoji">🌲</div>
+            <div class="story-content">
+              <div class="story-title">森林夜晚</div>
+              <div class="story-desc">在宁静的森林里，伴随虫鸣鸟叫进入梦乡</div>
+              <div class="story-time">30分钟</div>
+            </div>
+            <div class="story-play">▷</div>
+          </div>
+
+          <div class="story-item" data-sound="雨夜电台" onclick="playSound('雨夜电台', this)">
+            <div class="story-emoji">📻</div>
+            <div class="story-content">
+              <div class="story-title">雨夜电台</div>
+              <div class="story-desc">雨夜里的温暖电台，陪你慢慢入睡</div>
+              <div class="story-time">28分钟</div>
+            </div>
+            <div class="story-play">▷</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub-title">
+            <svg class="icon-stroke" viewBox="0 0 24 24">
+              <path d="M4 12h8"></path>
+              <path d="M8 8l4 4-4 4"></path>
+              <path d="M14 7c3 0 6 2 6 5s-3 5-6 5"></path>
+            </svg>
+            <span>白噪音</span>
+          </div>
+
+          <div class="white-noise-grid">
+            <div class="noise-item" data-sound="雨声" onclick="playSound('雨声', this)">
+              <div class="noise-emoji">🌧️</div>
+              <div class="noise-name">雨声</div>
+            </div>
+
+            <div class="noise-item" data-sound="海浪" onclick="playSound('海浪', this)">
+              <div class="noise-emoji">🌊</div>
+              <div class="noise-name">海浪</div>
+            </div>
+
+            <div class="noise-item" data-sound="森林" onclick="playSound('森林', this)">
+              <div class="noise-emoji">🌲</div>
+              <div class="noise-name">森林</div>
+            </div>
+
+            <div class="noise-item" data-sound="夜晚" onclick="playSound('夜晚', this)">
+              <div class="noise-emoji">🌙</div>
+              <div class="noise-name">夜晚</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="sub-title">
+            <svg class="icon-stroke" viewBox="0 0 24 24">
+              <path d="M5 18V6"></path>
+              <path d="M10 18V10"></path>
+              <path d="M15 18V4"></path>
+              <path d="M20 18V8"></path>
+            </svg>
+            <span>舒缓音乐</span>
+          </div>
+
+          <div class="music-item" data-sound="平静旋律" onclick="playSound('平静旋律', this)">
+            <div>
+              <div class="music-title">平静旋律</div>
+              <div class="music-time">15分钟</div>
+            </div>
+            <div class="music-play">▷</div>
+          </div>
+
+          <div class="music-item" data-sound="梦境之音" onclick="playSound('梦境之音', this)">
+            <div>
+              <div class="music-title">梦境之音</div>
+              <div class="music-time">20分钟</div>
+            </div>
+            <div class="music-play">▷</div>
+          </div>
+
+          <div class="music-item" data-sound="温柔时光" onclick="playSound('温柔时光', this)">
+            <div>
+              <div class="music-title">温柔时光</div>
+              <div class="music-time">18分钟</div>
+            </div>
+            <div class="music-play">▷</div>
+          </div>
+        </div>
+
+        <div class="soft-card">
+          <div class="sub-title">温馨提示</div>
+          <div class="note-text" style="text-align:center; line-height:2.1;">
+            深呼吸，让身心放松<br />
+            放下一天的疲惫<br />
+            你已经很努力了<br />
+            是时候好好休息了<br />
+            明天会更美好
+          </div>
+        </div>
+      </div>
+
+      <!-- 设置 -->
+      <div class="page" id="page-settings">
+        <div class="page-title">设置</div>
+
+        <div class="vip-card">
+          <div class="vip-left">
+            <div class="vip-icon">♕</div>
+            <div>
+              <div class="vip-title">升级到高级会员</div>
+              <div class="vip-desc">解锁深度分析和专属功能</div>
+            </div>
+          </div>
+          <div class="vip-arrow">→</div>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-section-title">作息时间</div>
+
+          <div class="setting-row" style="display:block;">
+            <div class="setting-left">
+              <div class="setting-row-title">睡觉时间</div>
+            </div>
+            <div class="time-box" onclick="openTimePicker('sleepInputHidden')">
+              <div class="time-value" id="sleepTarget">22:00</div>
+              <div class="time-action">◔</div>
+            </div>
+            <input class="time-input-hidden" type="time" id="sleepInputHidden" />
+          </div>
+
+          <div class="setting-row" style="display:block;">
+            <div class="setting-left">
+              <div class="setting-row-title">起床时间</div>
+            </div>
+            <div class="time-box" onclick="openTimePicker('wakeInputHidden')">
+              <div class="time-value" id="wakeTarget">07:00</div>
+              <div class="time-action">◔</div>
+            </div>
+            <input class="time-input-hidden" type="time" id="wakeInputHidden" />
+          </div>
+        </div>
+
+        <div class="setting-card">
+          <div class="setting-section-title">偏好设置</div>
+
+          <div class="setting-row">
+            <div class="setting-left">
+              <div class="setting-row-title">启用放松模式</div>
+              <div class="setting-row-sub">在睡前提供放松引导</div>
+            </div>
+            <div class="toggle" id="relaxToggle" onclick="toggleSetting('relaxEnabled', this)"></div>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-left">
+              <div class="setting-row-title">通知提醒</div>
+              <div class="setting-row-sub">在设定时间提醒您</div>
+            </div>
+            <div class="toggle" id="notifyToggle" onclick="toggleSetting('notifyEnabled', this)"></div>
+          </div>
+        </div>
+
+        <div class="soft-card about-box">
+          <div class="about-name">别熬夜了</div>
+          <div class="about-version">Version 1.1.0</div>
+          <div class="about-desc">
+            帮助你建立健康的睡眠习惯，<br />
+            每天都元气满满 ✨
+          </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetAllData()">重置所有数据</button>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item active" onclick="switchPage('home', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path d="M4 11.5 12 5l8 6.5"></path>
+          <path d="M7 10.5v8h10v-8"></path>
+        </svg>
+        <span>首页</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('stats', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path d="M5 19V9"></path>
+          <path d="M12 19V5"></path>
+          <path d="M19 19v-7"></path>
+        </svg>
+        <span>统计</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('growth', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path d="M8 5h8"></path>
+          <path d="M9 5v3c0 2 1.5 4 3 4s3-2 3-4V5"></path>
+          <path d="M6 9H4c0 2 1 3 3 3"></path>
+          <path d="M18 9h2c0 2-1 3-3 3"></path>
+          <path d="M12 12v4"></path>
+          <path d="M8 20h8"></path>
+        </svg>
+        <span>成长</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('relax', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path d="M4 12h6"></path>
+          <path d="M7 8l4 4-4 4"></path>
+          <path d="M14 6c3 0 6 2 6 5s-3 5-6 5"></path>
+        </svg>
+        <span>放松</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('settings', this)">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.5-2.3.8a7 7 0 0 0-1.7-1l-.3-2.4H9.4l-.3 2.4a7 7 0 0 0-1.7 1L5 6l-2 3.5L5 11a7 7 0 0 0 0 2l-2 1.5 2 3.5 2.4-.8a7 7 0 0 0 1.7 1l.3 2.4h5.2l.3-2.4a7 7 0 0 0 1.7-1l2.3.8 2-3.5-2-1.5c.1-.3.1-.7.1-1z"></path>
+        </svg>
+        <span>设置</span>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+<script>
+  const storageKey = "sleepDataV2";
+
+  const defaultData = {
+    streak: 0,
+    late: 0,
+    exp: 0,
+    relaxEnabled: true,
+    notifyEnabled: true,
+    sleepTime: "22:00",
+    wakeTime: "07:00",
+    weeklyHours: [6.5, 7.2, 6.8, 7.9, 5.8, 8.1, 7.4],
+    selectedSound: ""
+  };
+
+  let sleepData = loadData();
+  let toastTimer = null;
+  let breathingTimer = null;
+  let breathingStep = 0;
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return { ...defaultData };
+      const parsed = JSON.parse(raw);
+      return { ...defaultData, ...parsed };
+    } catch (e) {
+      return { ...defaultData };
+    }
+  }
+
+  function saveData() {
+    localStorage.setItem(storageKey, JSON.stringify(sleepData));
+  }
+
+  function showToast(text) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    toast.innerText = text;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
+    }, 1800);
+  }
+
+  function switchPage(name, el) {
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.remove("active");
+    });
+
+    const target = document.getElementById("page-" + name);
+    if (target) target.classList.add("active");
+
+    document.querySelectorAll(".nav-item").forEach(item => {
+      item.classList.remove("active");
+    });
+
+    if (el) el.classList.add("active");
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, "0");
+    const m = String(now.getMinutes()).padStart(2, "0");
+    const timeText = h + ":" + m;
+
+    const clock = document.getElementById("clock");
+    const statusTime = document.getElementById("statusTime");
+    const periodEmoji = document.getElementById("periodEmoji");
+    const periodText = document.getElementById("periodText");
+    const headline = document.getElementById("headline");
+    const subline = document.getElementById("subline");
+    const tipText = document.getElementById("tipText");
+
+    if (clock) clock.innerText = timeText;
+    if (statusTime) statusTime.innerText = timeText;
+
+    let emoji = "🌙";
+    let period = "夜晚";
+    let title = "已经很晚了，可以早点休息吗？";
+    let sub = "明天还有很多美好的事情在等你。";
+    let tip = "今天已经很努力了，早点休息，明天会更有精神。";
+
+    const hour = now.getHours();
+
+    if (hour >= 6 && hour < 12) {
+      emoji = "🌤";
+      period = "上午";
+      title = "新的一天开始了";
+      sub = "规律作息，会让今天更轻盈。";
+      tip = "白天也别忘了照顾自己。";
+    } else if (hour >= 12 && hour < 18) {
+      emoji = "☀️";
+      period = "白天";
+      title = "保持良好的作息习惯";
+      sub = "今晚也记得早点休息。";
+      tip = "好作息，是慢慢变好的开始。";
+    } else if (hour >= 18 && hour < 22) {
+      emoji = "🌆";
+      period = "傍晚";
+      title = "今天辛苦了";
+      sub = "把节奏慢下来，晚上早点睡。";
+      tip = "傍晚开始放松，入睡会更容易。";
+    }
+
+    if (periodEmoji) periodEmoji.innerText = emoji;
+    if (periodText) periodText.innerText = period;
+    if (headline) headline.innerText = title;
+    if (subline) subline.innerText = sub;
+    if (tipText) tipText.innerText = tip;
+  }
+
+  function calcAvg(arr) {
+    return (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1);
+  }
+
+  function calcStability(arr) {
+    const diff = Math.max(...arr) - Math.min(...arr);
+    return Math.max(0, Math.min(100, 100 - Math.round(diff * 18)));
+  }
+
+  function getLevelInfo(exp) {
+    if (exp >= 1000) return { en: "Self-discipline Master", cn: "自律大师", emoji: "👑", level: 4, next: 1000 };
+    if (exp >= 600) return { en: "Morning Light", cn: "晨光使者", emoji: "🌅", level: 3, next: 1000 };
+    if (exp >= 300) return { en: "Star Traveler", cn: "星辰旅人", emoji: "⭐", level: 2, next: 600 };
+    if (exp >= 100) return { en: "Moon Guardian", cn: "月亮守护者", emoji: "🌙", level: 1, next: 300 };
+    return { en: "Night Owl", cn: "夜猫子", emoji: "🦉", level: 0, next: 100 };
+  }
+
+  function renderStats() {
+    const avg = calcAvg(sleepData.weeklyHours);
+    const stability = calcStability(sleepData.weeklyHours);
+
+    const streakDays = document.getElementById("streakDays");
+    const lateCount = document.getElementById("lateCount");
+    const latestSleep = document.getElementById("latestSleep");
+    const avgSleep = document.getElementById("avgSleep");
+    const stabilityScoreMain = document.getElementById("stabilityScoreMain");
+    const stabilityBar = document.getElementById("stabilityBar");
+    const stabilityTag = document.getElementById("stabilityTag");
+
+    if (streakDays) streakDays.innerText = sleepData.streak;
+    if (lateCount) lateCount.innerText = sleepData.late;
+    if (latestSleep) latestSleep.innerText = sleepData.sleepTime;
+    if (avgSleep) avgSleep.innerText = avg;
+    if (stabilityScoreMain) stabilityScoreMain.innerText = stability;
+    if (stabilityBar) stabilityBar.style.width = stability + "%";
+
+    let tag = "需改进";
+    if (stability >= 85) tag = "非常稳定";
+    else if (stability >= 70) tag = "不错";
+    else if (stability >= 55) tag = "一般";
+
+    if (stabilityTag) stabilityTag.innerText = tag;
+
+    renderBars();
+  }
+
+  function renderBars() {
+    const barsBox = document.getElementById("barsBox");
+    if (!barsBox) return;
+
+    const labels = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+    barsBox.innerHTML = `
+      <div class="chart-grid-line"></div>
+      <div class="chart-grid-line"></div>
+      <div class="chart-grid-line"></div>
+      <div class="chart-grid-line"></div>
+      <div class="chart-grid-line"></div>
+    `;
+
+    sleepData.weeklyHours.forEach((num, index) => {
+      const height = Math.max(22, num * 18);
+      const wrap = document.createElement("div");
+      wrap.className = "bar-wrap";
+      wrap.innerHTML = `
+        <div class="bar" style="height:${height}px"></div>
+        <div class="bar-label">${labels[index]}</div>
+      `;
+      barsBox.appendChild(wrap);
+    });
+  }
+
+  function renderGrowth() {
+    const info = getLevelInfo(sleepData.exp);
+
+    const growthStreakTop = document.getElementById("growthStreakTop");
+    const longestStreak = document.getElementById("longestStreak");
+    const levelEmoji = document.getElementById("levelEmoji");
+    const levelName = document.getElementById("levelName");
+    const levelNameCn = document.getElementById("levelNameCn");
+    const expValue = document.getElementById("expValue");
+    const nextLevelExp = document.getElementById("nextLevelExp");
+    const growthBar = document.getElementById("growthBar");
+    const upgradeTip = document.getElementById("upgradeTip");
+
+    if (growthStreakTop) growthStreakTop.innerText = sleepData.streak;
+    if (longestStreak) longestStreak.innerText = sleepData.streak;
+    if (levelEmoji) levelEmoji.innerText = info.emoji;
+    if (levelName) levelName.innerText = info.en;
+    if (levelNameCn) levelNameCn.innerText = info.cn;
+    if (expValue) expValue.innerText = sleepData.exp;
+    if (nextLevelExp) nextLevelExp.innerText = info.next;
+
+    let currentStart = 0;
+    let currentEnd = 100;
+
+    if (sleepData.exp < 100) {
+      currentStart = 0; currentEnd = 100;
+    } else if (sleepData.exp < 300) {
+      currentStart = 100; currentEnd = 300;
+    } else if (sleepData.exp < 600) {
+      currentStart = 300; currentEnd = 600;
+    } else if (sleepData.exp < 1000) {
+      currentStart = 600; currentEnd = 1000;
+    } else {
+      currentStart = 1000; currentEnd = 1000;
+    }
+
+    let percent = 100;
+    if (currentEnd !== currentStart) {
+      percent = ((sleepData.exp - currentStart) / (currentEnd - currentStart)) * 100;
+    }
+
+    if (growthBar) growthBar.style.width = Math.max(0, Math.min(percent, 100)) + "%";
+
+    const remain = Math.max(0, info.next - sleepData.exp);
+    if (upgradeTip) {
+      upgradeTip.innerText = remain === 0 ? "你已经达到当前最高等级" : `还需 ${remain} 经验升级`;
+    }
+
+    document.querySelectorAll(".level-list-item").forEach(item => item.classList.remove("active"));
+    const active = document.getElementById("lv" + info.level);
+    if (active) active.classList.add("active");
+  }
+
+  function renderSettings() {
+    const sleepTarget = document.getElementById("sleepTarget");
+    const wakeTarget = document.getElementById("wakeTarget");
+    const sleepInputHidden = document.getElementById("sleepInputHidden");
+    const wakeInputHidden = document.getElementById("wakeInputHidden");
+    const relaxToggle = document.getElementById("relaxToggle");
+    const notifyToggle = document.getElementById("notifyToggle");
+
+    if (sleepTarget) sleepTarget.innerText = sleepData.sleepTime;
+    if (wakeTarget) wakeTarget.innerText = sleepData.wakeTime;
+    if (sleepInputHidden) sleepInputHidden.value = sleepData.sleepTime;
+    if (wakeInputHidden) wakeInputHidden.value = sleepData.wakeTime;
+
+    if (relaxToggle) relaxToggle.classList.toggle("on", sleepData.relaxEnabled);
+    if (notifyToggle) notifyToggle.classList.toggle("on", sleepData.notifyEnabled);
+  }
+
+  function renderAll() {
+    updateClock();
+    renderStats();
+    renderGrowth();
+    renderSettings();
+    saveData();
+  }
+
+ let sleepCountdownTimer = null;
+let sleepCountdownSeconds = 0;
+
+function sleepNow() {
+  sleepData.streak += 1;
+  sleepData.exp += 24;
+
+  const todayHours = 7 + Math.random() * 1.4;
+  sleepData.weeklyHours.shift();
+  sleepData.weeklyHours.push(Number(todayHours.toFixed(1)));
+
+  renderAll();
+
+  const headline = document.getElementById("headline");
+  const subline = document.getElementById("subline");
+  const mainBtn = document.querySelector(".btn-primary");
+
+  if (headline) headline.innerText = "晚安，准备休息";
+  if (subline) subline.innerText = "正在进入睡眠模式";
+
+  if (mainBtn) {
+    mainBtn.innerText = "睡眠倒计时 30:00";
+    mainBtn.disabled = true;
+    mainBtn.style.opacity = "0.7";
+  }
+
+  clearInterval(sleepCountdownTimer);
+  sleepCountdownSeconds = 30 * 60;
+
+  sleepCountdownTimer = setInterval(() => {
+    sleepCountdownSeconds--;
+
+    const min = String(Math.floor(sleepCountdownSeconds / 60)).padStart(2, "0");
+    const sec = String(sleepCountdownSeconds % 60).padStart(2, "0");
+
+    if (mainBtn) {
+      mainBtn.innerText = `睡眠倒计时 ${min}:${sec}`;
+    }
+
+    if (sleepCountdownSeconds <= 0) {
+      clearInterval(sleepCountdownTimer);
+
+      if (headline) headline.innerText = "晚安，明早见";
+      if (subline) subline.innerText = "已进入休息状态";
+
+      if (mainBtn) {
+        mainBtn.innerText = "今晚已打卡";
+      }
+
+      showToast("睡眠模式已开启");
+    }
+  }, 1000);
+
+  showToast("开始睡觉倒计时");
+}
+
+function waitMore() {
+  const btn = document.querySelector(".btn-secondary");
+
+  sleepData.late += 1;
+  sleepData.streak = Math.max(0, sleepData.streak - 1);
+  renderAll();
+
+  if (sleepCountdownTimer) {
+    sleepCountdownSeconds += 10 * 60;
+    showToast("已延后10分钟");
+  } else {
+    if (btn) btn.innerText = "已延后10分钟";
+    showToast("再给自己10分钟");
+    setTimeout(() => {
+      if (btn) btn.innerText = "再拖10分钟";
+    }, 2000);
+  }
+}
+
+  function toggleSetting(key, el) {
+    sleepData[key] = !sleepData[key];
+    el.classList.toggle("on", sleepData[key]);
+    saveData();
+    showToast("设置已更新");
+  }
+
+  function openTimePicker(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    if (typeof input.showPicker === "function") {
+      input.showPicker();
+    } else {
+      input.click();
+    }
+  }
+
+  function startBreathing() {
+    const circle = document.getElementById("breathCircle");
+    const text = document.getElementById("breathText");
+    if (!circle || !text) return;
+
+    const steps = [
+      { circle: "吸气", text: "慢慢吸气..." },
+      { circle: "保持", text: "轻轻停留..." },
+      { circle: "呼气", text: "慢慢呼气..." }
+    ];
+
+    circle.classList.add("breathe");
+    clearInterval(breathingTimer);
+    breathingStep = 0;
+
+    circle.innerText = steps[0].circle;
+    text.innerText = steps[0].text;
+
+    breathingTimer = setInterval(() => {
+      breathingStep = (breathingStep + 1) % steps.length;
+      circle.innerText = steps[breathingStep].circle;
+      text.innerText = steps[breathingStep].text;
+    }, 2000);
+
+    showToast("呼吸练习已开始");
+  }
+
+  function clearSoundActive() {
+    document.querySelectorAll(".story-item, .noise-item, .music-item").forEach(item => {
+      item.classList.remove("active");
+    });
+  }
+
+  function playSound(name, el) {
+    sleepData.selectedSound = name;
+    saveData();
+    clearSoundActive();
+    if (el) el.classList.add("active");
+    showToast("已选择：" + name);
+  }
+
+  function resetAllData() {
+    const ok = confirm("确定要重置所有数据吗？");
+    if (!ok) return;
+    localStorage.removeItem(storageKey);
+    sleepData = { ...defaultData };
+    renderAll();
+    clearSoundActive();
+    showToast("数据已重置");
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sleepInputHidden = document.getElementById("sleepInputHidden");
+    const wakeInputHidden = document.getElementById("wakeInputHidden");
+
+    if (sleepInputHidden) {
+      sleepInputHidden.addEventListener("change", function () {
+        if (!this.value) return;
+        sleepData.sleepTime = this.value;
+        renderSettings();
+        saveData();
+        showToast("睡觉时间已更新");
+      });
+    }
+
+    if (wakeInputHidden) {
+      wakeInputHidden.addEventListener("change", function () {
+        if (!this.value) return;
+        sleepData.wakeTime = this.value;
+        renderSettings();
+        saveData();
+        showToast("起床时间已更新");
+      });
+    }
+
+    renderAll();
+    setInterval(updateClock, 10000);
+    // 音频控制
+const audio = document.getElementById("audioPlayer");
+
+function clearPlayingState() {
+  document.querySelectorAll(".noise-item, .music-item, .story-item").forEach(item => {
+    item.classList.remove("active-playing");
+    const playIcon = item.querySelector(".story-play, .music-play");
+    if (playIcon) playIcon.textContent = "▷";
+  });
+}
+
+function setPlayingState(el, isPlaying) {
+  if (!el) return;
+
+  if (isPlaying) {
+    el.classList.add("active-playing");
+    const playIcon = el.querySelector(".story-play, .music-play");
+    if (playIcon) playIcon.textContent = "❚❚";
+  } else {
+    el.classList.remove("active-playing");
+    const playIcon = el.querySelector(".story-play, .music-play");
+    if (playIcon) playIcon.textContent = "▷";
+  }
+}
+
+function playSound(file, el, label) {
+  if (!audio) return;
+
+  const currentFile = audio.getAttribute("data-file");
+
+  if (currentFile === file && !audio.paused) {
+    audio.pause();
+    setPlayingState(el, false);
+    showToast("已暂停 " + label);
+    return;
+  }
+
+  clearPlayingState();
+
+  audio.src = file;
+  audio.loop = true;
+  audio.setAttribute("data-file", file);
+
+  audio.play().then(() => {
+    setPlayingState(el, true);
+    showToast("正在播放 " + label);
+  }).catch(() => {
+    showToast("播放失败，请再点一次");
+  });
+}
+
+// 白噪音
+document.querySelectorAll(".noise-item").forEach((item, index) => {
+  item.addEventListener("click", () => {
+    const sounds = ["rain.mp3", "ocean.mp3", "forest.mp3", "night.mp3"];
+    const labels = ["雨声", "海浪", "森林", "夜晚"];
+    playSound(sounds[index], item, labels[index]);
+  });
+});
+
+// 舒缓音乐
+document.querySelectorAll(".music-item").forEach((item, index) => {
+  item.addEventListener("click", () => {
+    const sounds = ["calm.mp3", "dream.mp3", "soft.mp3"];
+    const labels = ["平静旋律", "梦境之音", "温柔时光"];
+    playSound(sounds[index], item, labels[index]);
+  });
+});
+
+// 睡眠故事
+document.querySelectorAll(".story-item").forEach((item, index) => {
+  item.addEventListener("click", () => {
+    const sounds = ["ocean-night.mp3", "forest-night.mp3", "rain-night.mp3"];
+    const labels = ["海边小屋", "森林夜晚", "雨夜电台"];
+    playSound(sounds[index], item, labels[index]);
+  });
+});
+
+// 音频自然结束时，恢复按钮状态
+if (audio) {
+  audio.addEventListener("pause", () => {
+    if (audio.ended) clearPlayingState();
+  });
+}
+  });
+</script>
+<audio id="audioPlayer" preload="auto"></audio>
+</body>
+</html>
