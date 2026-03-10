@@ -2115,6 +2115,7 @@ function playSound(file, el, label) {
 
   const currentFile = audio.getAttribute("data-file");
 
+  // 如果点的是当前正在播放的声音，就暂停
   if (currentFile === file && !audio.paused) {
     audio.pause();
     setPlayingState(el, false);
@@ -2124,14 +2125,21 @@ function playSound(file, el, label) {
 
   clearPlayingState();
 
+  // 关键：切换声音前彻底清空
+  audio.pause();
+  audio.removeAttribute("src");
+  audio.load();
+
+  // 点击时才真正加载音频
   audio.src = file;
-  audio.loop = true;
   audio.setAttribute("data-file", file);
+  audio.loop = true;
 
   audio.play().then(() => {
     setPlayingState(el, true);
     showToast("正在播放 " + label);
-  }).catch(() => {
+  }).catch((err) => {
+    console.log(err);
     showToast("播放失败，请再点一次");
   });
 }
@@ -2185,7 +2193,7 @@ if (audio) {
 }
   });
 </script>
-<audio id="audioPlayer" preload="metadata"></audio>
+<audio id="audioPlayer" preload="none"></audio>
 </body>
 </html>
 
