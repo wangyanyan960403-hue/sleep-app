@@ -2139,8 +2139,14 @@ function playSound(file, el, label) {
 // 白噪音
 document.querySelectorAll(".noise-item").forEach((item, index) => {
   item.addEventListener("click", () => {
-    const sounds = ["rain.mp3", "ocean.mp3", "forest.mp3", "night.mp3"];
-    const labels = ["雨声", "海浪", "森林", "夜晚"];
+    const sounds = ["rain.mp3", 
+    "ocean.mp3",
+     "forest.mp3", 
+     "night.mp3"];
+    const labels = ["雨声", 
+    "海浪",
+     "森林", 
+     "夜晚"];
     playSound(sounds[index], item, labels[index]);
   });
 });
@@ -2148,8 +2154,12 @@ document.querySelectorAll(".noise-item").forEach((item, index) => {
 // 舒缓音乐
 document.querySelectorAll(".music-item").forEach((item, index) => {
   item.addEventListener("click", () => {
-    const sounds = ["calm.mp3", "dream.mp3", "soft.mp3"];
-    const labels = ["平静旋律", "梦境之音", "温柔时光"];
+    const sounds = ["calm.mp3",
+     "dream.mp3",
+      "soft.mp3"];
+    const labels = ["平静旋律",
+     "梦境之音",
+      "温柔时光"];
     playSound(sounds[index], item, labels[index]);
   });
 });
@@ -2157,8 +2167,12 @@ document.querySelectorAll(".music-item").forEach((item, index) => {
 // 睡眠故事
 document.querySelectorAll(".story-item").forEach((item, index) => {
   item.addEventListener("click", () => {
-    const sounds = ["ocean-night.mp3", "forest-night.mp3", "rain-night.mp3"];
-    const labels = ["海边小屋", "森林夜晚", "雨夜电台"];
+    const sounds = ["ocean-night.mp3",
+     "forest-night.mp3", 
+     "rain-night.mp3"];
+    const labels = ["海边小屋", 
+    "森林夜晚", 
+    "雨夜电台"];
     playSound(sounds[index], item, labels[index]);
   });
 });
@@ -2171,6 +2185,7 @@ if (audio) {
 }
   });
 </script>
-<audio id="audioPlayer" preload="auto"></audio>
+<audio id="audioPlayer" preload="metadata"></audio>
 </body>
 </html>
+
